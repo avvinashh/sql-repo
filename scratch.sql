@@ -82,3 +82,35 @@ insert(t1.nm,t1.roll,t1.cl)
 values(tbl.nm,tbl.roll,tbl.cl);
 
 
+
+merge into a3 t1
+using
+(
+select nm
+,roll
+,cl
+from 
+(
+select nm as nm
+,roll as roll
+,cl as cl 
+from a1 
+union 
+select nm as nm
+,roll as roll
+,cl as cl
+from a2
+)t2
+)tbl
+on
+(t1.nm=tbl.nm and
+t1.roll=tbl.roll)
+when matched then 
+update set 
+(t1.nm=tbl.nm,
+t1.roll=tbl.roll,
+t1.cl=tbl.cl)
+when not matched then
+insert(t1.nm,t1.roll,t1.cl)
+values(tbl.nm,tbl.roll,tbl.cl);
+
